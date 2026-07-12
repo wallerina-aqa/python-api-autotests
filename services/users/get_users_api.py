@@ -44,6 +44,6 @@ class GetUsersAPI(UsersAPI):
         response = httpx.get(self.GET_USERS_API, params=params, timeout=self.TIMEOUT)
         self.STATUS_CODE = response.status_code
 
-        content_type = response.headers.get("content-type")
+        content_type = response.headers.get("content-type", "")
         if content_type == "application/json":
             self.RESPONSE_DATA = GetUsersResponse(**response.json())
