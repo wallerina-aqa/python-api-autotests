@@ -1,5 +1,5 @@
-import allure
-
+from schemas.error_schemas import ErrorMessageResponse
+from schemas.users_schemas import UserResponse
 from services.base_api import BaseAPI
 
 
@@ -9,11 +9,14 @@ class UsersAPI(BaseAPI):
         self.USERS_API = f"{self.BASE_API}/users"
         self.ALREADY_EXISTS_ERROR_MESSAGE = "User already exists."
 
-    @allure.step("Assert usernames equal to the one requested")
-    def assert_usernames(self, username):
-        for user in self.RESPONSE_DATA.items:
-            actual_username = user.username
-            assert actual_username == username, (
-                f"Users usernames should be '{username}', "
-                f"but one user's username is '{actual_username}'"
-            )
+    def get_user_response_data(self, response):
+        content_type = response.headers.get("content-type", "")
+        if "application/json" in content_type:
+            if self.STATUS_CODE in (401, 409):
+                if self.STATUS_CODE == 401:
+                    self.ERROR_MESSAGE = self.UNAUTHORIZED_ERROR_MESSAGE
+                else:
+                    self.ERROR_MESSAGE = self.ALREADY_EXISTS_ERROR_MESSAGE
+                self.RESPONSE_DATA = ErrorMessageResponse(**response.json())
+            else:
+                self.RESPONSE_DATA = UserResponse(**response.json())

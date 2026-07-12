@@ -1,8 +1,7 @@
 import allure
 import httpx
 
-from schemas.error_schemas import ErrorMessageResponse
-from schemas.users_schemas import UpdateUserRequest, UserResponse
+from schemas.users_schemas import UpdateUserRequest
 from services.users.users_api import UsersAPI
 
 
@@ -27,11 +26,4 @@ class UpdateUserAPI(UsersAPI):
             timeout=self.TIMEOUT,
         )
         self.STATUS_CODE = response.status_code
-
-        content_type = response.headers.get("content-type", "")
-        if "application/json" in content_type:
-            if self.STATUS_CODE == 401:
-                self.ERROR_MESSAGE = self.UNAUTHORIZED_ERROR_MESSAGE
-                self.RESPONSE_DATA = ErrorMessageResponse(**response.json())
-            else:
-                self.RESPONSE_DATA = UserResponse(**response.json())
+        self.get_user_response_data(response)

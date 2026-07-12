@@ -1,5 +1,6 @@
 import allure
 import httpx
+from pydantic import HttpUrl
 
 from schemas.characters_schemas import GetCharacterResponse
 from schemas.error_schemas import ErrorMessageResponse
@@ -25,3 +26,23 @@ class GetCharacterByIdAPI(CharactersAPI):
                 self.RESPONSE_DATA = ErrorMessageResponse(**response.json())
             else:
                 self.RESPONSE_DATA = GetCharacterResponse(**response.json())
+
+    @allure.step("Assert character name")
+    def assert_character_name(self, character_name):
+        if isinstance(self.RESPONSE_DATA, GetCharacterResponse):
+            expected_name = character_name
+            actual_name = self.RESPONSE_DATA.name
+            assert actual_name == expected_name, (
+                f"Character's name should be '{expected_name}', "
+                f"but actual name is '{actual_name}'"
+            )
+
+    @allure.step("Assert character image")
+    def assert_character_image(self, character_image):
+        if isinstance(self.RESPONSE_DATA, GetCharacterResponse):
+            expected_image = character_image
+            actual_image = self.RESPONSE_DATA.image
+            assert actual_image == HttpUrl(expected_image), (
+                f"Character's image should be '{expected_image}', "
+                f"but actual image is '{actual_image}'"
+            )

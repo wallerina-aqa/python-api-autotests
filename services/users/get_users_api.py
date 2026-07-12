@@ -47,3 +47,12 @@ class GetUsersAPI(UsersAPI):
         content_type = response.headers.get("content-type", "")
         if content_type == "application/json":
             self.RESPONSE_DATA = GetUsersResponse(**response.json())
+
+    @allure.step("Assert usernames equal to the one requested")
+    def assert_usernames(self, username):
+        for user in self.RESPONSE_DATA.items:
+            actual_username = user.username
+            assert actual_username == username, (
+                f"Users usernames should be '{username}', "
+                f"but one user's username is '{actual_username}'"
+            )
