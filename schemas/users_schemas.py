@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field, EmailStr
 
 
-class CreateUserRequest(BaseModel):
+class CreateUserRequestSchema(BaseModel):
     name: str = Field(min_length=1, max_length=64)
     surname: str = Field(min_length=1, max_length=64)
     middleName: str | None = Field(default=None, min_length=1, max_length=64)
@@ -13,7 +13,7 @@ class CreateUserRequest(BaseModel):
     isSubscribed: bool = Field(default=True)
 
 
-class UserResponse(BaseModel):
+class UserResponseSchema(BaseModel):
     id: int
     createdAt: datetime
     name: str = Field(min_length=1, max_length=64)
@@ -26,7 +26,7 @@ class UserResponse(BaseModel):
     isConfirmed: bool
 
 
-class UserData(BaseModel):
+class UserDataSchema(BaseModel):
     id: int
     isConfirmed: bool
     createdAt: datetime
@@ -35,15 +35,15 @@ class UserData(BaseModel):
     surname: str | None = None
 
 
-class GetUsersResponse(BaseModel):
-    items: list[UserData]
+class GetUsersResponseSchema(BaseModel):
+    items: list[UserDataSchema]
     total: int = Field(ge=0)
     page: int = Field(ge=1)
     size: int = Field(ge=1)
     pages: int = Field(ge=0)
 
 
-class UpdateUserRequest(BaseModel):
+class UpdateUserRequestSchema(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=64)
     surname: str | None = Field(default=None)
     middleName: str | None = Field(default=None, min_length=1, max_length=64)

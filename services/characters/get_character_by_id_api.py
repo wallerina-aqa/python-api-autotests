@@ -2,8 +2,8 @@ import allure
 import httpx
 from pydantic import HttpUrl
 
-from schemas.characters_schemas import GetCharacterResponse
-from schemas.error_schemas import ErrorMessageResponse
+from schemas.characters_schemas import GetCharacterResponseSchema
+from schemas.error_schemas import ErrorMessageResponseSchema
 from services.characters.characters_api import CharactersAPI
 
 
@@ -23,13 +23,13 @@ class GetCharacterByIdAPI(CharactersAPI):
         if "application/json" in content_type:
             if response.status_code == 404:
                 self.ERROR_MESSAGE = self.NOT_FOUND_ERROR_MESSAGE
-                self.RESPONSE_DATA = ErrorMessageResponse(**response.json())
+                self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
             else:
-                self.RESPONSE_DATA = GetCharacterResponse(**response.json())
+                self.RESPONSE_DATA = GetCharacterResponseSchema(**response.json())
 
     @allure.step("Assert character name")
     def assert_character_name(self, character_name):
-        if isinstance(self.RESPONSE_DATA, GetCharacterResponse):
+        if isinstance(self.RESPONSE_DATA, GetCharacterResponseSchema):
             expected_name = character_name
             actual_name = self.RESPONSE_DATA.name
             assert actual_name == expected_name, (
@@ -39,7 +39,7 @@ class GetCharacterByIdAPI(CharactersAPI):
 
     @allure.step("Assert character image")
     def assert_character_image(self, character_image):
-        if isinstance(self.RESPONSE_DATA, GetCharacterResponse):
+        if isinstance(self.RESPONSE_DATA, GetCharacterResponseSchema):
             expected_image = character_image
             actual_image = self.RESPONSE_DATA.image
             assert actual_image == HttpUrl(expected_image), (

@@ -1,7 +1,7 @@
 import allure
 import httpx
 
-from schemas.users_schemas import UpdateUserRequest
+from schemas.users_schemas import UpdateUserRequestSchema
 from services.users.users_api import UsersAPI
 
 
@@ -15,9 +15,9 @@ class UpdateUserAPI(UsersAPI):
     def send_request(self, user_data_to_update, access_token=None, validate=True):
         headers = {"Authorization": f"Bearer {access_token}"}
         if validate:
-            user_data_to_update = UpdateUserRequest(**user_data_to_update).model_dump(
-                exclude_none=True
-            )
+            user_data_to_update = UpdateUserRequestSchema(
+                **user_data_to_update
+            ).model_dump(exclude_none=True)
 
         response = httpx.put(
             self.UPDATE_USER_API,

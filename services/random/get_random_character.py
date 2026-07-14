@@ -1,7 +1,7 @@
 import allure
 import httpx
 
-from schemas.characters_schemas import GetCharacterResponse
+from schemas.characters_schemas import GetCharacterResponseSchema
 from services.random.random_api import RandomAPI
 
 
@@ -18,4 +18,4 @@ class GetRandomCharacterAPI(RandomAPI):
 
         content_type = response.headers.get("content-type", "")
         if "application/json" in content_type:
-            self.RESPONSE_DATA = GetCharacterResponse(**response.json())
+            self.RESPONSE_DATA = GetCharacterResponseSchema(**response.json())

@@ -1,7 +1,7 @@
 import allure
 import httpx
 
-from schemas.users_schemas import GetUsersResponse
+from schemas.users_schemas import GetUsersResponseSchema
 from services.users.users_api import UsersAPI
 
 
@@ -46,7 +46,7 @@ class GetUsersAPI(UsersAPI):
 
         content_type = response.headers.get("content-type", "")
         if content_type == "application/json":
-            self.RESPONSE_DATA = GetUsersResponse(**response.json())
+            self.RESPONSE_DATA = GetUsersResponseSchema(**response.json())
 
     @allure.step("Assert usernames equal to the one requested")
     def assert_usernames(self, username):

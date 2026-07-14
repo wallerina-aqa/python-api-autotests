@@ -1,7 +1,7 @@
 import allure
 import httpx
 
-from schemas.users_schemas import CreateUserRequest
+from schemas.users_schemas import CreateUserRequestSchema
 from services.users.users_api import UsersAPI
 
 
@@ -14,7 +14,7 @@ class CreateUserAPI(UsersAPI):
     @allure.step("Send POST request to create new user")
     def send_request(self, new_user_data, validate=True):
         if validate:
-            new_user_data = CreateUserRequest(**new_user_data).model_dump()
+            new_user_data = CreateUserRequestSchema(**new_user_data).model_dump()
 
         response = httpx.post(
             self.CREATE_USER_API, json=new_user_data, timeout=self.TIMEOUT

@@ -4,19 +4,19 @@ from enum import Enum
 from pydantic import BaseModel, HttpUrl, Field
 
 
-class Gender(str, Enum):
+class CharacterGender(str, Enum):
     MALE = "MALE"
     FEMALE = "FEMALE"
     UNKNOWN = "UNKNOWN"
 
 
-class Status(str, Enum):
+class CharacterStatus(str, Enum):
     ALIVE = "ALIVE"
     DEAD = "DEAD"
     UNKNOWN = "UNKNOWN"
 
 
-class Species(str, Enum):
+class CharactersSpecies(str, Enum):
     HUMAN = "HUMAN"
     ROBOT = "ROBOT"
     HEAD = "HEAD"
@@ -26,17 +26,17 @@ class Species(str, Enum):
     UNKNOWN = "UNKNOWN"
 
 
-class GetCharacterResponse(BaseModel):
+class GetCharacterResponseSchema(BaseModel):
     id: int
     name: str
-    gender: Gender
-    status: Status
+    gender: CharacterGender
+    status: CharacterStatus
     createdAt: datetime
     image: HttpUrl | None = None
 
 
-class GetListOfCharactersResponse(BaseModel):
-    items: list[GetCharacterResponse]
+class GetListOfCharactersResponseSchema(BaseModel):
+    items: list[GetCharacterResponseSchema]
     total: int = Field(description="Total number of characters")
     page: int = Field(description="Page number")
     size: int = Field(description="Size per page")

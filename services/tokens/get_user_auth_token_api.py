@@ -1,8 +1,8 @@
 import allure
 import httpx
 
-from schemas.auth_schemas import GetUserAuthTokenResponse
-from schemas.error_schemas import ErrorMessageResponse
+from schemas.auth_schemas import GetUserAuthTokenResponseSchema
+from schemas.error_schemas import ErrorMessageResponseSchema
 from services.tokens.tokens_api import TokensAPI
 
 
@@ -25,7 +25,7 @@ class GetUserAuthTokenAPI(TokensAPI):
         if "application/json" in content_type:
             if self.STATUS_CODE == 401:
                 self.ERROR_MESSAGE = self.UNAUTHORIZED_ERROR_MESSAGE
-                self.RESPONSE_DATA = ErrorMessageResponse(**response.json())
+                self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
             else:
-                self.RESPONSE_DATA = GetUserAuthTokenResponse(**response.json())
+                self.RESPONSE_DATA = GetUserAuthTokenResponseSchema(**response.json())
                 self.ACCESS_TOKEN = self.RESPONSE_DATA.access_token

@@ -1,7 +1,7 @@
 import allure
 import httpx
 
-from schemas.characters_schemas import GetListOfCharactersResponse
+from schemas.characters_schemas import GetListOfCharactersResponseSchema
 from services.characters.characters_api import CharactersAPI
 
 
@@ -93,4 +93,4 @@ class GetCharactersAPI(CharactersAPI):
 
         content_type = response.headers.get("content-type", "")
         if "application/json" in content_type:
-            self.RESPONSE_DATA = GetListOfCharactersResponse(**response.json())
+            self.RESPONSE_DATA = GetListOfCharactersResponseSchema(**response.json())

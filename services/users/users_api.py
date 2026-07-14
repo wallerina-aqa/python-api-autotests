@@ -1,5 +1,5 @@
-from schemas.error_schemas import ErrorMessageResponse
-from schemas.users_schemas import UserResponse
+from schemas.error_schemas import ErrorMessageResponseSchema
+from schemas.users_schemas import UserResponseSchema
 from services.base_api import BaseAPI
 
 
@@ -17,6 +17,6 @@ class UsersAPI(BaseAPI):
                     self.ERROR_MESSAGE = self.UNAUTHORIZED_ERROR_MESSAGE
                 else:
                     self.ERROR_MESSAGE = self.ALREADY_EXISTS_ERROR_MESSAGE
-                self.RESPONSE_DATA = ErrorMessageResponse(**response.json())
+                self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
             else:
-                self.RESPONSE_DATA = UserResponse(**response.json())
+                self.RESPONSE_DATA = UserResponseSchema(**response.json())
