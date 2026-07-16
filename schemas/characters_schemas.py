@@ -1,22 +1,22 @@
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, HttpUrl, Field
 
 
-class CharacterGender(str, Enum):
+class CharacterGender(StrEnum):
     MALE = "MALE"
     FEMALE = "FEMALE"
     UNKNOWN = "UNKNOWN"
 
 
-class CharacterStatus(str, Enum):
+class CharacterStatus(StrEnum):
     ALIVE = "ALIVE"
     DEAD = "DEAD"
     UNKNOWN = "UNKNOWN"
 
 
-class CharactersSpecies(str, Enum):
+class CharactersSpecies(StrEnum):
     HUMAN = "HUMAN"
     ROBOT = "ROBOT"
     HEAD = "HEAD"
@@ -31,7 +31,7 @@ class GetCharacterResponseSchema(BaseModel):
     name: str
     gender: CharacterGender
     status: CharacterStatus
-    createdAt: datetime
+    created_at: datetime = Field(alias="createdAt")
     image: HttpUrl | None = None
 
 

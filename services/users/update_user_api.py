@@ -17,7 +17,7 @@ class UpdateUserAPI(UsersAPI):
         if validate:
             user_data_to_update = UpdateUserRequestSchema(
                 **user_data_to_update
-            ).model_dump(exclude_none=True)
+            ).model_dump(by_alias=True, exclude_none=True)
 
         response = httpx.put(
             self.UPDATE_USER_API,

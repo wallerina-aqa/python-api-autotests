@@ -1,29 +1,35 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, ConfigDict
 
 
 class CreateUserRequestSchema(BaseModel):
+    model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
+
     name: str = Field(min_length=1, max_length=64)
     surname: str = Field(min_length=1, max_length=64)
-    middleName: str | None = Field(default=None, min_length=1, max_length=64)
+    middle_name: str | None = Field(
+        alias="middleName", default=None, min_length=1, max_length=64
+    )
     email: EmailStr
     username: str = Field(min_length=5, max_length=64)
     password: str = Field(min_length=8, max_length=128)
-    isSubscribed: bool = Field(default=True)
+    is_subscribed: bool = Field(alias="isSubscribed", default=True)
 
 
 class UserResponseSchema(BaseModel):
     id: int
-    createdAt: datetime
+    created_at: datetime = Field(alias="createdAt")
     name: str = Field(min_length=1, max_length=64)
     surname: str = Field(min_length=1, max_length=64)
-    middleName: str | None = Field(default=None, min_length=1, max_length=64)
+    middle_name: str | None = Field(
+        alias="middleName", default=None, min_length=1, max_length=64
+    )
     email: EmailStr
     username: str = Field(min_length=5, max_length=64)
     password: str = Field(min_length=8, max_length=128)
-    isSubscribed: bool
-    isConfirmed: bool
+    is_subscribed: bool = Field(alias="isSubscribed")
+    is_confirmed: bool = Field(alias="isConfirmed")
 
 
 class UserDataSchema(BaseModel):
@@ -44,8 +50,12 @@ class GetUsersResponseSchema(BaseModel):
 
 
 class UpdateUserRequestSchema(BaseModel):
+    model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
+
     name: str | None = Field(default=None, min_length=1, max_length=64)
     surname: str | None = Field(default=None)
-    middleName: str | None = Field(default=None, min_length=1, max_length=64)
+    middle_name: str | None = Field(
+        alias="middleName", default=None, min_length=1, max_length=64
+    )
     password: str | None = Field(default=None, min_length=8, max_length=128)
-    isSubscribed: bool | None = Field(default=None)
+    is_subscribed: bool | None = Field(alias="isSubscribed", default=None)
