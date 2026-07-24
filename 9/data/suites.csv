@@ -1,0 +1,3 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","298","Get user auth tokens success","tests.tokens","2026-07-04","passed","2026-07-04","TestGetUserAuthToken","test_get_user_auth_token","",""
+"","336","Get unexisting user auth tokens failure","tests.tokens","2026-07-04","passed","2026-07-04","TestGetUserAuthToken","test_get_user_auth_token","",""
