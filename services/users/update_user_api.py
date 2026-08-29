@@ -13,6 +13,8 @@ class UpdateUserAPI(UsersAPI):
 
     @allure.step("Send PUT request to fully update user")
     def send_request(self, user_data_to_update, access_token=None, validate=True):
+        self.reset_attributes("STATUS_CODE", "ERROR_MESSAGE", "RESPONSE_DATA")
+
         headers = {"Authorization": f"Bearer {access_token}"}
         if validate:
             user_data_to_update = UpdateUserRequestSchema(

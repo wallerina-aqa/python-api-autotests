@@ -14,6 +14,14 @@ class BaseAPI:
         self.ERROR_MESSAGE = None
         self.UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized"
 
+    def reset_attributes(self, *attributes):
+        for attribute in attributes:
+            if not hasattr(self, attribute):
+                raise AttributeError(
+                    f"{type(self).__name__} has no attribute {attribute!r}"
+                )
+            setattr(self, attribute, None)
+
     @allure.step("Assert response status is {status_code}")
     def assert_response_status(self, status_code):
         assert (

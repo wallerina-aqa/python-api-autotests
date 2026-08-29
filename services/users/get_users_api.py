@@ -38,15 +38,22 @@ class GetUsersAPI(UsersAPI):
 
     @allure.step("Send GET request to get list of users by username")
     def send_request(self, username: str, page=None, size=None):
+        self.reset_attributes("REQUEST_PARAMS", "STATUS_CODE", "RESPONSE_DATA")
+
         params = self.create_params(query=username, page=page, size=size)
         self.REQUEST_PARAMS = params
 
-        response = httpx.get(self.GET_USERS_API, params=params, timeout=self.TIMEOUT)
+        response = httpx.get(
+            self.GET_USERS_API, params=self.REQUEST_PARAMS, timeout=self.TIMEOUT
+        )
         self.STATUS_CODE = response.status_code
 
         content_type = response.headers.get("content-type", "")
-        if content_type == "application/json":
-            self.RESPONSE_DATA = GetUsersResponseSchema(**response.json())
+        if "application/json" not in content_type:
+            raise ValueError(
+                f"Expected application/json content type, but got {content_type!r}"
+            )
+        self.RESPONSE_DATA = GetUsersResponseSchema(**response.json())
 
     @allure.step("Assert usernames equal to the one requested")
     def assert_usernames(self, username):

@@ -74,6 +74,8 @@ class GetCharactersAPI(CharactersAPI):
         page=None,
         size=None,
     ):
+        self.reset_attributes("REQUEST_PARAMS", "STATUS_CODE", "RESPONSE_DATA")
+
         params = self.create_params(
             gender=gender,
             status=status,
@@ -92,5 +94,8 @@ class GetCharactersAPI(CharactersAPI):
         self.STATUS_CODE = response.status_code
 
         content_type = response.headers.get("content-type", "")
-        if "application/json" in content_type:
-            self.RESPONSE_DATA = GetListOfCharactersResponseSchema(**response.json())
+        if "application/json" not in content_type:
+            raise ValueError(
+                f"Expected application/json content type, but got {content_type!r}"
+            )
+        self.RESPONSE_DATA = GetListOfCharactersResponseSchema(**response.json())

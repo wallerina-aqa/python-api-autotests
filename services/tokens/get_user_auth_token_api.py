@@ -15,6 +15,10 @@ class GetUserAuthTokenAPI(TokensAPI):
 
     @allure.step("Send POST request to get user auth tokens")
     def send_request(self, username, password):
+        self.reset_attributes(
+            "STATUS_CODE", "ERROR_MESSAGE", "RESPONSE_DATA", "ACCESS_TOKEN"
+        )
+
         user_data = {"username": username, "password": password}
         response = httpx.post(
             self.GET_USER_AUTH_TOKEN_API, data=user_data, timeout=self.TIMEOUT
@@ -22,10 +26,13 @@ class GetUserAuthTokenAPI(TokensAPI):
         self.STATUS_CODE = response.status_code
 
         content_type = response.headers.get("content-type", "")
-        if "application/json" in content_type:
-            if self.STATUS_CODE == 401:
-                self.ERROR_MESSAGE = self.UNAUTHORIZED_ERROR_MESSAGE
-                self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
-            else:
-                self.RESPONSE_DATA = GetUserAuthTokenResponseSchema(**response.json())
-                self.ACCESS_TOKEN = self.RESPONSE_DATA.access_token
+        if "application/json" not in content_type:
+            raise ValueError(
+                f"Expected application/json content type, but got {content_type!r}"
+            )
+        if self.STATUS_CODE == 401:
+            self.ERROR_MESSAGE = self.UNAUTHORIZED_ERROR_MESSAGE
+            self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
+        else:
+            self.RESPONSE_DATA = GetUserAuthTokenResponseSchema(**response.json())
+            self.ACCESS_TOKEN = self.RESPONSE_DATA.access_token

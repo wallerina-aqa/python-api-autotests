@@ -13,13 +13,15 @@ class CreateUserAPI(UsersAPI):
 
     @allure.step("Send POST request to create new user")
     def send_request(self, new_user_data, validate=True):
+        self.reset_attributes("STATUS_CODE", "ERROR_MESSAGE", "RESPONSE_DATA")
+
         if validate:
             new_user_data = CreateUserRequestSchema(**new_user_data).model_dump(
                 by_alias=True
             )
-
         response = httpx.post(
             self.CREATE_USER_API, json=new_user_data, timeout=self.TIMEOUT
         )
+
         self.STATUS_CODE = response.status_code
         self.get_user_response_data(response)

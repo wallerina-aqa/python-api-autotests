@@ -12,6 +12,8 @@ class GetMeAPI(UsersAPI):
 
     @allure.step("Send GET request to get information about current user")
     def send_request(self, access_token=None):
+        self.reset_attributes("STATUS_CODE", "ERROR_MESSAGE", "RESPONSE_DATA")
+
         headers = {"Authorization": f"Bearer {access_token}"}
         response = httpx.get(self.GET_ME_API, headers=headers, timeout=self.TIMEOUT)
         self.STATUS_CODE = response.status_code

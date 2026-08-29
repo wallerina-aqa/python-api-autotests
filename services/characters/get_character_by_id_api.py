@@ -14,18 +14,24 @@ class GetCharacterByIdAPI(CharactersAPI):
 
     @allure.step("Send GET request to get character by id")
     def send_request(self, character_id=1):
+        self.reset_attributes("STATUS_CODE", "ERROR_MESSAGE", "RESPONSE_DATA")
+
         response = httpx.get(
             f"{self.CHARACTERS_API}/{character_id}", timeout=self.TIMEOUT
         )
         self.STATUS_CODE = response.status_code
 
         content_type = response.headers.get("content-type", "")
-        if "application/json" in content_type:
-            if response.status_code == 404:
-                self.ERROR_MESSAGE = self.NOT_FOUND_ERROR_MESSAGE
-                self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
-            else:
-                self.RESPONSE_DATA = GetCharacterResponseSchema(**response.json())
+        if "application/json" not in content_type:
+            raise ValueError(
+                f"Expected application/json content type, but got {content_type!r}"
+            )
+
+        if response.status_code == 404:
+            self.ERROR_MESSAGE = self.NOT_FOUND_ERROR_MESSAGE
+            self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
+        else:
+            self.RESPONSE_DATA = GetCharacterResponseSchema(**response.json())
 
     @allure.step("Assert character name")
     def assert_character_name(self, character_name):
