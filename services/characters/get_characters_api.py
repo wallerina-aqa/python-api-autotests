@@ -10,6 +10,7 @@ class GetCharactersAPI(CharactersAPI):
         super().__init__()
         self.GET_CHARACTERS_API = self.CHARACTERS_API
         self.TIMEOUT = 10
+        self.SCHEMA = GetListOfCharactersResponseSchema
 
         self.GENDER = None
         self.STATUS = None
@@ -92,10 +93,4 @@ class GetCharactersAPI(CharactersAPI):
             self.GET_CHARACTERS_API, params=self.REQUEST_PARAMS, timeout=self.TIMEOUT
         )
         self.STATUS_CODE = response.status_code
-
-        content_type = response.headers.get("content-type", "")
-        if "application/json" not in content_type:
-            raise ValueError(
-                f"Expected application/json content type, but got {content_type!r}"
-            )
-        self.RESPONSE_DATA = GetListOfCharactersResponseSchema(**response.json())
+        self.get_response_data(response)

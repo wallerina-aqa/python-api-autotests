@@ -10,6 +10,7 @@ class GetRandomCharacterAPI(RandomAPI):
         super().__init__()
         self.RANDOM_CHARACTER_API = f"{self.RANDOM_API}/character"
         self.TIMEOUT = 10
+        self.SCHEMA = GetCharacterResponseSchema
 
     @allure.step("Send GET request to get random character")
     def send_request(self):
@@ -17,10 +18,4 @@ class GetRandomCharacterAPI(RandomAPI):
 
         response = httpx.get(self.RANDOM_CHARACTER_API, timeout=self.TIMEOUT)
         self.STATUS_CODE = response.status_code
-
-        content_type = response.headers.get("content-type", "")
-        if "application/json" not in content_type:
-            raise ValueError(
-                f"Expected application/json content type, but got {content_type!r}"
-            )
-        self.RESPONSE_DATA = GetCharacterResponseSchema(**response.json())
+        self.get_response_data(response)

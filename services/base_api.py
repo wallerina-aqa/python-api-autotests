@@ -1,6 +1,7 @@
 import os
 
 import allure
+from pydantic import BaseModel
 
 
 class BaseAPI:
@@ -10,6 +11,7 @@ class BaseAPI:
         self.REQUEST_PARAMS = None
 
         self.STATUS_CODE = None
+        self.SCHEMA: type[BaseModel] | None = None
         self.RESPONSE_DATA = None
         self.ERROR_MESSAGE = None
         self.UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized"
@@ -21,6 +23,17 @@ class BaseAPI:
                     f"{type(self).__name__} has no attribute {attribute!r}"
                 )
             setattr(self, attribute, None)
+
+    def get_response_data(self, response):
+        content_type = response.headers.get("content-type", "")
+        if "application/json" not in content_type:
+            raise ValueError(
+                f"Expected application/json content type, but got {content_type!r}"
+            )
+
+        if self.SCHEMA is None:
+            raise ValueError("SCHEMA is not set.")
+        self.RESPONSE_DATA = self.SCHEMA(**response.json())
 
     @allure.step("Assert response status is {status_code}")
     def assert_response_status(self, status_code):

@@ -21,34 +21,40 @@ class GetCharacterByIdAPI(CharactersAPI):
         )
         self.STATUS_CODE = response.status_code
 
-        content_type = response.headers.get("content-type", "")
-        if "application/json" not in content_type:
-            raise ValueError(
-                f"Expected application/json content type, but got {content_type!r}"
-            )
-
         if response.status_code == 404:
             self.ERROR_MESSAGE = self.NOT_FOUND_ERROR_MESSAGE
-            self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
+            self.SCHEMA = ErrorMessageResponseSchema
         else:
-            self.RESPONSE_DATA = GetCharacterResponseSchema(**response.json())
+            self.SCHEMA = GetCharacterResponseSchema
+
+        self.get_response_data(response)
 
     @allure.step("Assert character name")
     def assert_character_name(self, character_name):
-        if isinstance(self.RESPONSE_DATA, GetCharacterResponseSchema):
-            expected_name = character_name
-            actual_name = self.RESPONSE_DATA.name
-            assert actual_name == expected_name, (
-                f"Character's name should be '{expected_name}', "
-                f"but actual name is '{actual_name}'"
+        if not isinstance(self.RESPONSE_DATA, GetCharacterResponseSchema):
+            raise TypeError(
+                "Expected RESPONSE_DATA to be GetCharacterResponseSchema, "
+                f"but got {type(self.RESPONSE_DATA).__name__}"
             )
+
+        expected_name = character_name
+        actual_name = self.RESPONSE_DATA.name
+        assert actual_name == expected_name, (
+            f"Character's name should be '{expected_name}', "
+            f"but actual name is '{actual_name}'"
+        )
 
     @allure.step("Assert character image")
     def assert_character_image(self, character_image):
-        if isinstance(self.RESPONSE_DATA, GetCharacterResponseSchema):
-            expected_image = character_image
-            actual_image = self.RESPONSE_DATA.image
-            assert actual_image == HttpUrl(expected_image), (
-                f"Character's image should be '{expected_image}', "
-                f"but actual image is '{actual_image}'"
+        if not isinstance(self.RESPONSE_DATA, GetCharacterResponseSchema):
+            raise TypeError(
+                "Expected RESPONSE_DATA to be GetCharacterResponseSchema, "
+                f"but got {type(self.RESPONSE_DATA).__name__}"
             )
+
+        expected_image = character_image
+        actual_image = self.RESPONSE_DATA.image
+        assert actual_image == HttpUrl(expected_image), (
+            f"Character's image should be '{expected_image}', "
+            f"but actual image is '{actual_image}'"
+        )

@@ -10,17 +10,13 @@ class UsersAPI(BaseAPI):
         self.ALREADY_EXISTS_ERROR_MESSAGE = "User already exists."
 
     def get_user_response_data(self, response):
-        content_type = response.headers.get("content-type", "")
-        if "application/json" not in content_type:
-            raise ValueError(
-                f"Expected application/json content type, but got {content_type!r}"
-            )
-
         if self.STATUS_CODE in (401, 409):
             if self.STATUS_CODE == 401:
                 self.ERROR_MESSAGE = self.UNAUTHORIZED_ERROR_MESSAGE
             else:
                 self.ERROR_MESSAGE = self.ALREADY_EXISTS_ERROR_MESSAGE
-            self.RESPONSE_DATA = ErrorMessageResponseSchema(**response.json())
+            self.SCHEMA = ErrorMessageResponseSchema
         else:
-            self.RESPONSE_DATA = UserResponseSchema(**response.json())
+            self.SCHEMA = UserResponseSchema
+
+        self.get_response_data(response)

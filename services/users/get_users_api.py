@@ -10,6 +10,7 @@ class GetUsersAPI(UsersAPI):
         super().__init__()
         self.GET_USERS_API = self.USERS_API
         self.TIMEOUT = 25
+        self.SCHEMA = GetUsersResponseSchema
 
         self.QUERY = None
         self.PAGE = 1
@@ -47,16 +48,16 @@ class GetUsersAPI(UsersAPI):
             self.GET_USERS_API, params=self.REQUEST_PARAMS, timeout=self.TIMEOUT
         )
         self.STATUS_CODE = response.status_code
-
-        content_type = response.headers.get("content-type", "")
-        if "application/json" not in content_type:
-            raise ValueError(
-                f"Expected application/json content type, but got {content_type!r}"
-            )
-        self.RESPONSE_DATA = GetUsersResponseSchema(**response.json())
+        self.get_response_data(response)
 
     @allure.step("Assert usernames equal to the one requested")
     def assert_usernames(self, username):
+        if not isinstance(self.RESPONSE_DATA, GetUsersResponseSchema):
+            raise TypeError(
+                "Expected RESPONSE_DATA to be GetUsersResponseSchema, "
+                f"but got {type(self.RESPONSE_DATA).__name__}"
+            )
+
         for user in self.RESPONSE_DATA.items:
             actual_username = user.username
             assert actual_username == username, (
