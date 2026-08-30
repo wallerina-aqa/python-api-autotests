@@ -1,0 +1,8 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","368","Get current user details success","tests.users","2026-07-04","passed","2026-07-04","TestGetMe","test_get_me_api","",""
+"","670","Update user details success","tests.users","2026-07-04","passed","2026-07-04","TestUpdateUser","test_update_user","",""
+"","447","Update user details without access token failure","tests.users","2026-07-04","passed","2026-07-04","TestUpdateUser","test_update_user","",""
+"","537","Create user with existing username failure","tests.users","2026-07-04","passed","2026-07-04","TestCreateUser","test_create_user","",""
+"","346","Get current user details without access token failure","tests.users","2026-07-04","passed","2026-07-04","TestGetMe","test_get_me_api","",""
+"","1194","Create user success","tests.users","2026-07-04","passed","2026-07-04","TestCreateUser","test_create_user","",""
+"","473","Get list of users by username success","tests.users","2026-07-04","passed","2026-07-04","TestGetUsers","test_get_users","",""

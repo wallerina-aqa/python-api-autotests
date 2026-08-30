@@ -1,0 +1,5 @@
+"BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
+"0","","0","Users service","2","0","Get information about current user","0"
+"0","","0","Users service","2","0","Update user details","0"
+"0","","0","Users service","2","0","Create user","0"
+"0","","0","Users service","1","0","Get list of users by username","0"

@@ -1,0 +1,2 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","359","Get random character success","tests.random","2026-07-04","passed","2026-07-04","TestGetRandomCharacter","test_get_random_character","",""

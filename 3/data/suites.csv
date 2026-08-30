@@ -1,0 +1,6 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","299","Get character by id success","tests.characters","2026-07-04","passed","2026-07-04","TestGetCharacterById","test_get_character_by_id","",""
+"","358","Get character by id success","tests.characters","2026-07-04","passed","2026-07-04","TestGetCharacterById","test_get_character_by_id","",""
+"","294","Get character by id success","tests.characters","2026-07-04","passed","2026-07-04","TestGetCharacterById","test_get_character_by_id","",""
+"","164","Get list of characters success","tests.characters","2026-07-04","passed","2026-07-04","TestGetCharacters","test_get_characters","",""
+"","304","Get character by unexisting id failure","tests.characters","2026-07-04","passed","2026-07-04","TestGetCharacterById","test_get_character_by_id","",""
